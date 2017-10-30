@@ -17,43 +17,40 @@ const int MaxN = 50;
 
 int road[MaxN]; 
 bool visited[MaxN]; 
-//int MinWay[MaxN], MaxWay[MaxN]; 
-//int MinWaylen, MaxWaylen;
-//int MinL, MaxL; 
-int cLen;
 bool found;
+int finish;
 
 struct Way {
 	int pathWay[MaxN];
-	int pathVertex;		//количество вершин
+	int pathVertex;		//количество вершин в маршруте
 	int pathLen;
 };
 
 struct Way minW, maxW;
 
-void Init (Way path)
+void Init (Way &path)
 {
 	for (int i=0; i<MaxN; i++)
 	{
 		path.pathWay[i] = 0;
-		path.pathVertex = 0;
-		path.pathLen = 0;
 	}
+	path.pathVertex = 0;
+	path.pathLen = 0;	
 }
 
-void PrintWay (Way path)
+void PrintWay (Way &path)
 {
 	int pathLen = path.pathVertex;
 
 	for (int i=0; i<pathLen; i++) 
 		cout << path.pathWay[i] + 1 << " ";
-	cout << "длина которого " << path.pathLen << endl;
+	cout << "длина равна " << path.pathLen << endl;
 }
 
-void step (int Matr[MaxN][MaxN], int size, int cur, int f, int p) {
+void step (int Matr[MaxN][MaxN], int size, int cur, int p, int cLen) {
 
 	int next;
-	if (cur == f) {				//путь найден
+	if (cur == finish-1) {	//finish - 1 тк нумерация с нуля
 		
 		if (cLen < minW.pathLen || !found ) 
 		{
@@ -66,7 +63,7 @@ void step (int Matr[MaxN][MaxN], int size, int cur, int f, int p) {
 		{
 			maxW.pathLen = cLen;
 			maxW.pathVertex = p;							
-			for (int i=0; i<cLen; i++) 
+			for (int i = 0; i < cLen; i++) 
 				maxW.pathWay[i] = road[i];
 		}
 		found = true; //поставить флажок "найдено"
@@ -76,12 +73,10 @@ void step (int Matr[MaxN][MaxN], int size, int cur, int f, int p) {
 			int w = Matr[cur][next];
 			if (w > 0 && !visited[next]) {	
 				road[p] = next;					
-				visited[next] = true;					
-				cLen += w;						
-				step (Matr, size, next, f, p+1);	//вызвать себя для поиска следующей точки
-				road[p] = 0;						//вернуть всё как было
+				visited[next] = true;									
+				step (Matr, size, next, p+1, cLen+w);	//вызвать себя для поиска следующей точки
+				road[p] = 0;							//вернуть всё как было
 				visited[next] = false;
-				cLen -= w;
 			}
 		}
 	}
@@ -91,25 +86,15 @@ int main () {
 	setlocale(LC_ALL, "Rus");
 	srand (time(0));
 
-	/*int map[MaxN][MaxN] = {
+	int map[MaxN][MaxN] = {
 						 {0, 7, 9, 0, 0, 14},
 						 {7, 0, 10, 15, 0, 0},
 						 {9, 10, 0, 11, 0, 2},
 						 {0, 15, 11, 0, 6, 0},
 						 {0, 0, 0, 6, 0, 9},
 						 {14, 0, 2, 0, 9, 0}
-						 };
-						 */
-	
-	int map[MaxN][MaxN] = {
-	{0, 3, 8, 2, 0, 7},
-	{3, 0, 0, 0, 0, 0},
-	{8, 0, 0, 1, 4, 0},
-	{2, 0, 1, 0, 2, 1},
-	{0, 0, 4, 2, 0, 1},
-	{7, 0, 0, 1, 1, 0}
-	};
-	
+						 };						//для этого графа мин путь из 1 вершины в 5 - 20, макс - 47
+						 
 	int n=6; //количество городов
 
 	/*
@@ -168,7 +153,6 @@ int main () {
 		cout << endl;
 	}
 
-	//Инициализация массивов короткого пути и длинного, массива посещенных вершин
 	for (int i = 0; i < n; i++) {
 		road[i] = 0; visited[i] = false;
 	}
@@ -176,21 +160,19 @@ int main () {
 	Init(minW);
 	Init(maxW);
 
-	cLen = 0;
-
-	int start, finish; //начальная и конечная вершины
+	int start;
 	cout << "Введите номера городов, между которыми найти расстояние: " << endl;
 	cin >> start >> finish;
 	cout << endl;
 
-	road[0] = start-1; //первую точку внесли в маршрут
-	visited[start-1] = true; //и пометили как включённую
-	found = false; //но путь пока не найден
-	step (map, n, start-1, finish-1, 1); //ищем вторую точку
+	road[0] = start-1;			//первую точку внесли в маршрут
+	visited[start-1] = true;	//и пометили как включённую
+	found = false;				//но путь пока не найден
+	step (map, n, start-1, 1, 0); //ищем вторую точку
 	if (found) {
 		if (minW.pathLen == maxW.pathLen) 
 		{
-			cout << "Существует единственный путь из " << start << " в " << finish << ":"<< endl;
+			cout << "Длины максимального и минимально путей из " << start << " в " << finish << " совпадают:"<< endl;
 			PrintWay(minW);		
 		}
 		else 
