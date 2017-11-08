@@ -56,14 +56,14 @@ void step (int Matr[MaxN][MaxN], int size, int cur, int p, int cLen) {
 		{
 			minW.pathLen = cLen;
 			minW.pathVertex = p;		//запомнить длину пути (количество узлов)
-			for (int i=0; i < cLen; i++)	 
+			for (int i=0; i < p; i++)	 
 				minW.pathWay[i] = road[i];
 		}
 		if (cLen > maxW.pathLen) 
 		{
 			maxW.pathLen = cLen;
 			maxW.pathVertex = p;							
-			for (int i = 0; i < cLen; i++) 
+			for (int i = 0; i < p; i++) 
 				maxW.pathWay[i] = road[i];
 		}
 		found = true; //поставить флажок "найдено"
