@@ -1,4 +1,4 @@
-п»ї#include "DoubleLinkedList.h"
+#include "DoubleLinkedList.h"
 
 template<typename T>
 DoubleLinkedList<T>::DoubleLinkedList()
@@ -13,7 +13,7 @@ DoubleLinkedList<T>::~DoubleLinkedList()
 {
 	Node *tmp;
 
-	while (head) //РџРѕРєР° РїРѕ Р°РґСЂРµСЃСѓ РЅР° РЅР°С‡Р°Р»Рѕ СЃРїРёСЃРєР° С‡С‚Рѕ-С‚Рѕ РµСЃС‚СЊ
+	while (head) 
 	{
 		tmp = head;
 		head = tmp->next;
@@ -95,14 +95,14 @@ bool DoubleLinkedList<T>::symmetric() {
 template<typename T>
 int DoubleLinkedList<T>::cntUniqueNodes()
 {
-	set<T> uniqueEl; //РїСѓСЃС‚РѕРµ РјРЅРѕР¶РµСЃС‚РІРѕ
+	set<T> uniqueEl; //пустое множество
 
 	Node *tmp;
 	for (tmp = head; tmp; tmp = tmp->next)
 	{
 		uniqueEl.insert(tmp->data);
 	}
-	//copy(uniqueEl.begin(), uniqueEl.end(), ostream_iterator<T>(cout, " ")); //РІС‹РІРѕРґ СЌР»РµРјРµРЅС‚РѕРІ РјРЅРѕР¶РµСЃС‚РІР° 
+	//copy(uniqueEl.begin(), uniqueEl.end(), ostream_iterator<T>(cout, " ")); //вывод элементов множества 
 
 	return int(uniqueEl.size());
 }
@@ -129,45 +129,70 @@ void DoubleLinkedList<T>::delMetNodes()
 			}
 		}
 	}
-	//РїРѕСЃР»Рµ СѓРґР°Р»РµРЅРёР№ СЃС‚Р°РІРёРј С…РІРѕСЃС‚ РЅР° РјРµСЃС‚Рѕ
+	//после удалений ставим хвост на место
 	for (tmp = head; tmp->next; tmp = tmp->next) {}
 	tail = tmp;
 
 }
 
 template<typename T>
-void DoubleLinkedList<T>::sortList() //СЃРѕСЂС‚РёСЂРѕРІРєР° РїРѕ РІРѕР·СЂР°СЃС‚Р°РЅРёСЋ
+void DoubleLinkedList<T>::sortList() //сортировка по возрастанию
 {	
 
-	Node *tmp1, *tmp2;
+	Node *tmp1, *tmp2, *minNode;
 	T i;
-	for (tmp1 = head; tmp1; tmp1 = tmp1->next )
-		for (tmp2 = head; tmp2; tmp2 = tmp2->next )
-			if (tmp1->data < tmp2->data ){
-				i = tmp1->data;
-				tmp1->data = tmp2->data;
-				tmp2->data = i;
-			}	
+	for(tmp1 = head; tmp1 != tail; tmp1 = tmp1->next)
+	{
+		minNode = tmp1;
+		for (tmp2 = tmp1; tmp2; tmp2=tmp2->next){
+			if (tmp2->data < tmp->data) { minNode = tmp2;}
+		}
+		i = tmp1->data; 
+		tmp1->data = minNode->data;
+		minNode->data = i;
+	}
+
 }
 
 template<typename T>
 void DoubleLinkedList<T>::reverseList()
 {
+	if (head == tail) return;
+
 	Node* tmpLeft = head;
 	Node* tmpRight = tail;
+	Node* tmp;
 
-	int i = 0;
-	T tmpData;
 
-	while (i != count/2)
+	tail->next = head->next;
+	head->next->prev = tail;
+	tail->prev->next = head;
+	head->prev = tail->prev;
+	tail->prev = nullptr;
+	head->next = nullptr;
+
+	tmp = head;
+	head = tail;
+	tail = tmp;
+	
+	tmpLeft = head->next;
+	tmpRight = tail->prev;
+
+	while (tmpLeft != tmpRight && tmpLeft->prev != tmpRight)
 	{ 
-		tmpData = tmpLeft->data;
-		tmpLeft->data = tmpRight->data;
-		tmpRight->data = tmpData; 
+		tmpLeft->next->prev = tmpRight;
+		tmpLeft->prev->next = tmpRight;
 
-		tmpLeft = tmpLeft->next;
-		tmpRight = tmpRight->prev;
+		tmpRight->prev->next = tmpLeft;
+		tmpRight->next->prev = tmpLeft;
 
-		i++; 
+		tmp = tmpRight->next;
+		tmpRight->next = tmpLeft->next;
+		tmpLeft->next = tmp;
+
+		tmp = tmpRight->prev;
+		tmpRight->prev = tmpLeft->prev;
+		tmpLeft->prev = tmp;
+
 	}
 }

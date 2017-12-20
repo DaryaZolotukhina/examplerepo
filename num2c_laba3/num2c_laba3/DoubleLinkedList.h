@@ -1,4 +1,4 @@
-п»ї#ifndef DOUBLELINKEDLIST_H_
+#ifndef DOUBLELINKEDLIST_H_
 #define DOUBLELINKEDLIST_H_
 
 #include <iostream>
@@ -28,7 +28,7 @@ public:
 	DoubleLinkedList();
 	~DoubleLinkedList();
 
-	int getLength() const { return count; }// РІС‹С‡РёСЃР»РµРЅРёРµ РґР»РёРЅС‹
+	int getLength() const { return count; }// вычисление длины
 
 	void addToBeg(const T&);
 	void addToEnd(const T&);
