@@ -1,4 +1,4 @@
-#include "DoubleLinkedList.h"
+п»ї#include "DoubleLinkedList.h"
 
 template<typename T>
 DoubleLinkedList<T>::DoubleLinkedList()
@@ -95,14 +95,14 @@ bool DoubleLinkedList<T>::symmetric() {
 template<typename T>
 int DoubleLinkedList<T>::cntUniqueNodes()
 {
-	set<T> uniqueEl; //пустое множество
+	set<T> uniqueEl; //РїСѓСЃС‚РѕРµ РјРЅРѕР¶РµСЃС‚РІРѕ
 
 	Node *tmp;
 	for (tmp = head; tmp; tmp = tmp->next)
 	{
 		uniqueEl.insert(tmp->data);
 	}
-	//copy(uniqueEl.begin(), uniqueEl.end(), ostream_iterator<T>(cout, " ")); //вывод элементов множества 
+	//copy(uniqueEl.begin(), uniqueEl.end(), ostream_iterator<T>(cout, " ")); //РІС‹РІРѕРґ СЌР»РµРјРµРЅС‚РѕРІ РјРЅРѕР¶РµСЃС‚РІР° 
 
 	return int(uniqueEl.size());
 }
@@ -129,14 +129,14 @@ void DoubleLinkedList<T>::delMetNodes()
 			}
 		}
 	}
-	//после удалений ставим хвост на место
+	//РїРѕСЃР»Рµ СѓРґР°Р»РµРЅРёР№ СЃС‚Р°РІРёРј С…РІРѕСЃС‚ РЅР° РјРµСЃС‚Рѕ
 	for (tmp = head; tmp->next; tmp = tmp->next) {}
 	tail = tmp;
 
 }
 
 template<typename T>
-void DoubleLinkedList<T>::sortList() //сортировка по возрастанию
+void DoubleLinkedList<T>::sortList() //СЃРѕСЂС‚РёСЂРѕРІРєР° РїРѕ РІРѕР·СЂР°СЃС‚Р°РЅРёСЋ
 {	
 
 	Node *tmp1, *tmp2, *minNode;
