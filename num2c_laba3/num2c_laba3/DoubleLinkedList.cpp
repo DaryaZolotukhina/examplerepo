@@ -145,7 +145,7 @@ void DoubleLinkedList<T>::sortList() //сортировка по возраст�
 	{
 		minNode = tmp1;
 		for (tmp2 = tmp1; tmp2; tmp2=tmp2->next){
-			if (tmp2->data < tmp->data) { minNode = tmp2;}
+			if (tmp2->data < minNode->data) { minNode = tmp2;}
 		}
 		i = tmp1->data; 
 		tmp1->data = minNode->data;
@@ -159,11 +159,10 @@ void DoubleLinkedList<T>::reverseList()
 {
 	if (head == tail) return;
 
-	Node* tmpLeft = head;
-	Node* tmpRight = tail;
 	Node* tmp;
+	int i = 0;
 
-
+	//меняем голову и хвост
 	tail->next = head->next;
 	head->next->prev = tail;
 	tail->prev->next = head;
@@ -174,11 +173,12 @@ void DoubleLinkedList<T>::reverseList()
 	tmp = head;
 	head = tail;
 	tail = tmp;
+	i++;
 	
-	tmpLeft = head->next;
-	tmpRight = tail->prev;
+	Node* tmpLeft = head->next;
+	Node* tmpRight = tail->prev;
 
-	while (tmpLeft != tmpRight && tmpLeft->prev != tmpRight)
+	while (tmpLeft->next != tmpRight && i < count/2) //пока не дошли до середины списка и не меняем соседей
 	{ 
 		tmpLeft->next->prev = tmpRight;
 		tmpLeft->prev->next = tmpRight;
@@ -194,5 +194,16 @@ void DoubleLinkedList<T>::reverseList()
 		tmpRight->prev = tmpLeft->prev;
 		tmpLeft->prev = tmp;
 
+		i++;
+
+	}
+
+	if (tmpLeft->next == tmpRight) { //меняем соседей
+		tmpRight->next->prev = tmpLeft;
+		tmpLeft->next = tmpRight->next;
+		tmpLeft->prev->next = tmpRight;
+		tmpRight->prev = tmpLeft->prev;
+		tmpLeft->prev = tmpRight;
+		tmpRight->next = tmpLeft;
 	}
 }
