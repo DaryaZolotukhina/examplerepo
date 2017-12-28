@@ -154,7 +154,28 @@ void DoubleLinkedList<T>::sortList() //сортировка по возраст�
 
 }
 
+
 template<typename T>
+void DoubleLinkedList<T>::reverseList()
+{
+	
+	Node* tmp = head;
+	
+	for (int i = 0; i < count; i++, tmp = tmp->prev)
+	{
+		Node *save;
+		save = tmp->prev;
+		tmp->prev = tmp->next;
+		tmp->next = save;		
+	}
+
+	tmp = head;
+	head = tail;
+	tail = tmp;
+
+}
+
+/*template<typename T>
 void DoubleLinkedList<T>::reverseList()
 {
 	if (head == tail) return;
@@ -206,4 +227,6 @@ void DoubleLinkedList<T>::reverseList()
 		tmpLeft->prev = tmpRight;
 		tmpRight->next = tmpLeft;
 	}
-}
+}*/
+
+
